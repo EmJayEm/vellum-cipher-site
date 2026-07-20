@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emergent Code Server</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- PASSWORD GATE -->
+  <div class="gate" id="gate">
+    <canvas id="gateCanvas"></canvas>
+    <div class="gate-content">
+      <div class="gate-logo">
+        <div class="logo-ring"></div>
+        <div class="logo-ring ring-2"></div>
+        <div class="logo-ring ring-3"></div>
+        <div class="logo-icon">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 8h8l8 12-8 12H8l8-12L8 8z" fill="var(--accent)"/>
+            <path d="M20 8h8l8 12-8 12h-8l8-12-8-12z" fill="var(--accent-dim)" opacity="0.7"/>
+            <path d="M32 8h8l-8 12 8 12h-8l-8-12 8-12z" fill="var(--accent)" opacity="0.4"/>
+          </svg>
+        </div>
+      </div>
+      <h1 class="glitch" data-text="Welcome">Welcome</h1>
+      <p class="gate-subtitle">Emergent Code Server</p>
+      <p class="gate-hint">Enter password to access</p>
+      <form class="gate-form" id="gateForm" autocomplete="off">
+        <div class="input-group">
+          <input
+            type="password"
+            id="passwordInput"
+            class="gate-input"
+            placeholder="Password"
+            autofocus
+            autocomplete="off"
+          />
+          <button type="submit" class="gate-submit">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+        <div class="gate-error" id="gateError">Incorrect password. Try again.</div>
+        <div class="gate-shake" id="gateShake">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+        </div>
+      </form>
+      <div class="gate-footer">
+        <span class="typed-line" id="typedLine"></span>
+        <span class="cursor-blink">_</span>
+      </div>
+    </div>
+    <div class="gate-particles" id="gateParticles"></div>
+  </div>
+
+  <!-- MAIN SITE -->
+  <div class="site" id="site">
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <span class="nav-logo-bracket">{</span>
+          <span class="nav-logo-text">EC</span>
+          <span class="nav-logo-bracket">}</span>
+        </a>
+        <div class="nav-links" id="navLinks">
+          <a href="#hero" class="nav-link active" data-section="hero">Home</a>
+          <a href="#about" class="nav-link" data-section="about">About</a>
+          <a href="#features" class="nav-link" data-section="features">Features</a>
+          <a href="#terminal" class="nav-link" data-section="terminal">Terminal</a>
+          <a href="#stats" class="nav-link" data-section="stats">Stats</a>
+          <a href="#contact" class="nav-link" data-section="contact">Contact</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="section hero" id="hero">
+      <canvas id="heroCanvas"></canvas>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="pulse-dot"></span>
+          System Online &mdash; v4.128.0
+        </div>
+        <h1 class="hero-title">
+          <span class="line line-1">Welcome to</span>
+          <span class="line line-2">
+            <span class="typed-word" id="typedWord"></span>
+            <span class="typed-cursor">|</span>
+          </span>
+          <span class="line line-3 gradient-text">Code Server</span>
+        </h1>
+        <p class="hero-desc">
+          A powerful, browser-based development environment.
+          Code anywhere. Deploy everywhere. Build the future.
+        </p>
+        <div class="hero-actions">
+          <a href="#features" class="btn btn-primary">
+            <span>Explore Features</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="#terminal" class="btn btn-ghost">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>
+            </svg>
+            <span>Open Terminal</span>
+          </a>
+        </div>
+        <div class="hero-scroll-indicator">
+          <div class="scroll-line"></div>
+          <span>scroll</span>
+        </div>
+      </div>
+      <div class="hero-grid-overlay"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section about" id="about">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">01 / About</span>
+          <h2 class="section-title">What is <span class="gradient-text">Code Server</span>?</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-card" data-reveal>
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </div>
+            <h3>Browser-Based IDE</h3>
+            <p>Full VS Code experience running directly in your browser. No installations, no configurations. Just open and code.</p>
+          </div>
+          <div class="about-card" data-reveal>
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3>Full Stack Power</h3>
+            <p>Run any language, any framework. Node.js, Python, Go, Rust - everything works seamlessly in the cloud.</p>
+          </div>
+          <div class="about-card" data-reveal>
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+              </svg>
+            </div>
+            <h3>Collaborative</h3>
+            <p>Share your workspace with teammates in real-time. Pair programming made effortless across any distance.</p>
+          </div>
+          <div class="about-card about-card-highlight" data-reveal>
+            <div class="about-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <h3>Lightning Fast</h3>
+            <p>Optimized performance with instant load times. Our infrastructure ensures zero lag between thought and code.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section features" id="features">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">02 / Features</span>
+          <h2 class="section-title">Built for <span class="gradient-text">Developers</span></h2>
+        </div>
+        <div class="features-list">
+          <div class="feature-item" data-reveal>
+            <div class="feature-number">01</div>
+            <div class="feature-content">
+              <h3>Extensions Marketplace</h3>
+              <p>Access thousands of extensions directly from the browser. Themes, linters, debuggers - install with one click.</p>
+            </div>
+            <div class="feature-visual">
+              <div class="code-block">
+                <div class="code-dots"><span></span><span></span><span></span></div>
+                <pre><code><span class="kw">const</span> ext = <span class="fn">install</span>(<span class="str">"prettier"</span>);
+<span class="cm">// Extension installed!</span></code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="feature-item" data-reveal>
+            <div class="feature-number">02</div>
+            <div class="feature-content">
+              <h3>Integrated Terminal</h3>
+              <p>Full Linux terminal at your fingertips. Run commands, manage servers, deploy applications.</p>
+            </div>
+            <div class="feature-visual">
+              <div class="code-block terminal-block">
+                <div class="code-dots"><span></span><span></span><span></span></div>
+                <pre><code><span class="prompt">$</span> <span class="cmd">npm</span> run build
+<span class="output">✓ Compiled successfully</span>
+<span class="prompt">$</span> <span class="cmd">deploy</span> --production</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="feature-item" data-reveal>
+            <div class="feature-number">03</div>
+            <div class="feature-content">
+              <h3>Git Integration</h3>
+              <p>Seamless version control built right in. Branch, commit, merge, and resolve conflicts visually.</p>
+            </div>
+            <div class="feature-visual">
+              <div class="code-block">
+                <div class="code-dots"><span></span><span></span><span></span></div>
+                <pre><code><span class="prompt">$</span> <span class="cmd">git</span> status
+<span class="output">On branch <span class="hl">main</span></span>
+<span class="output">Changes staged for commit</span></code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="feature-item" data-reveal>
+            <div class="feature-number">04</div>
+            <div class="feature-content">
+              <h3>AI Assistant</h3>
+              <p>Intelligent code suggestions and auto-completions powered by machine learning.</p>
+            </div>
+            <div class="feature-visual">
+              <div class="code-block ai-block">
+                <div class="code-dots"><span></span><span></span><span></span></div>
+                <pre><code><span class="ai-comment">// AI suggests:</span>
+<span class="ai-suggest">fibonacci(n) {</span>
+<span class="ai-suggest">  return n <span class="op"><=</span> <span class="num">1</span> ? n :</span>
+<span class="ai-suggest">    fibonacci(n-1) + fibonacci(n-2);</span>
+<span class="ai-suggest">}</span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TERMINAL -->
+    <section class="section terminal-section" id="terminal">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">03 / Terminal</span>
+          <h2 class="section-title">Try the <span class="gradient-text">Interactive</span> Terminal</h2>
+        </div>
+        <div class="terminal-wrapper" data-reveal>
+          <div class="terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <span class="terminal-title">emergent@code-server ~ /</span>
+            </div>
+            <div class="terminal-body" id="terminalBody">
+              <div class="terminal-output" id="terminalOutput">
+                <div class="terminal-line">Welcome to Emergent Code Server v4.128.0</div>
+                <div class="terminal-line">Type <span class="cmd">help</span> for available commands.</div>
+                <div class="terminal-line">&nbsp;</div>
+              </div>
+              <div class="terminal-input-line">
+                <span class="terminal-prompt">emergent@code-server:~$</span>
+                <input type="text" class="terminal-input" id="terminalInput" autofocus spellcheck="false" autocomplete="off" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="section stats-section" id="stats">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">04 / Stats</span>
+          <h2 class="section-title">By the <span class="gradient-text">Numbers</span></h2>
+        </div>
+        <div class="stats-grid" data-reveal>
+          <div class="stat-card">
+            <div class="stat-value" data-target="4.128">0</div>
+            <div class="stat-label">Version</div>
+            <div class="stat-bar"><div class="stat-bar-fill" data-width="92"></div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" data-target="10000" data-suffix="+">0</div>
+            <div class="stat-label">Extensions</div>
+            <div class="stat-bar"><div class="stat-bar-fill" data-width="85"></div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" data-target="50" data-suffix="ms">0</div>
+            <div class="stat-label">Avg Response</div>
+            <div class="stat-bar"><div class="stat-bar-fill" data-width="95"></div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" data-target="99.9" data-suffix="%">0</div>
+            <div class="stat-label">Uptime</div>
+            <div class="stat-bar"><div class="stat-bar-fill" data-width="99"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact-section" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">05 / Contact</span>
+          <h2 class="section-title">Get in <span class="gradient-text">Touch</span></h2>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-info" data-reveal>
+            <p class="contact-desc">Have questions, feedback, or want to collaborate? We'd love to hear from you.</p>
+            <div class="contact-links">
+              <a href="#" class="contact-link-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <span>hello@emergent.dev</span>
+              </a>
+              <a href="#" class="contact-link-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+                </svg>
+                <span>github.com/emergent</span>
+              </a>
+              <a href="#" class="contact-link-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                </svg>
+                <span>@emergent_dev</span>
+              </a>
+            </div>
+          </div>
+          <form class="contact-form" data-reveal id="contactForm">
+            <div class="form-group">
+              <input type="text" id="contactName" required placeholder=" " />
+              <label for="contactName">Name</label>
+              <div class="form-line"></div>
+            </div>
+            <div class="form-group">
+              <input type="email" id="contactEmail" required placeholder=" " />
+              <label for="contactEmail">Email</label>
+              <div class="form-line"></div>
+            </div>
+            <div class="form-group">
+              <textarea id="contactMessage" rows="4" required placeholder=" "></textarea>
+              <label for="contactMessage">Message</label>
+              <div class="form-line"></div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">
+              <span>Send Message</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <span class="nav-logo-bracket">{</span>
+            <span class="nav-logo-text">EC</span>
+            <span class="nav-logo-bracket">}</span>
+            <span class="footer-version">v4.128.0</span>
+          </div>
+          <div class="footer-copy">
+            &copy; 2026 Emergent Code Server. All rights reserved.
+          </div>
+          <div class="footer-status">
+            <span class="pulse-dot"></span> All systems operational
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
