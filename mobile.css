@@ -1,0 +1,108 @@
+/* ============================================
+   VELLUM & CIPHER — Mobile Optimization
+   ============================================ */
+
+/* ===== GENERAL MOBILE (up to 768px) ===== */
+@media (max-width: 768px) {
+
+  /* NAV */
+  .nav-underline::after { display: none; }
+
+  /* HERO */
+  h1 { font-size: clamp(32px, 8vw, 48px) !important; letter-spacing: -0.5px !important; }
+
+  /* CARDS */
+  .card-hover { transform: none !important; }
+  .card-hover:hover { transform: none !important; box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important; }
+
+  /* MAGNETIC BUTTONS — disable on touch */
+  .btn-magnetic { transform: none !important; }
+
+  /* TERMINAL */
+  #terminal-output { min-height: 120px !important; font-size: 12px !important; }
+
+  /* GLOW ORBS — smaller on mobile */
+  .glow-orb { filter: blur(80px); opacity: 0.5; }
+}
+
+/* ===== SMALL MOBILE (up to 480px) ===== */
+@media (max-width: 480px) {
+  body { -webkit-text-size-adjust: 100%; }
+
+  /* Prevent horizontal scroll */
+  html, body { overflow-x: hidden; max-width: 100vw; }
+
+  /* Larger touch targets */
+  button, a, input, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Form inputs bigger */
+  input[type="email"], input[type="text"], textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    padding: 14px 16px !important;
+  }
+
+  /* Section spacing */
+  section { padding-top: 60px !important; padding-bottom: 60px !important; }
+
+  /* Footer columns stack */
+  footer .grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+}
+
+/* ===== TABLET (769px to 1024px) ===== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .glow-orb { filter: blur(90px); opacity: 0.6; }
+}
+
+/* ===== LANDSCAPE MOBILE ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+  section { min-height: auto !important; padding-top: 80px !important; padding-bottom: 60px !important; }
+}
+
+/* ===== DARK MODE SUPPORT (optional override) ===== */
+@media (prefers-color-scheme: dark) {
+  /* Keep light mode — this is intentional for Vellum & Cipher's brand.
+     Uncomment below to enable auto-dark mode:
+  */
+  /*
+  :root {
+    --bg: #0f172a;
+    --text: #e2e8f0;
+  }
+  body { background: var(--bg); color: var(--text); }
+  */
+}
+
+/* ===== SAFE AREA (notch devices) ===== */
+@supports (padding: env(safe-area-inset-top)) {
+  header {
+    padding-top: env(safe-area-inset-top);
+  }
+  footer {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  #scroll-progress, #load-curtain, #heroCanvas, .glow-orb, .btn-magnetic,
+  #mobile-toggle, #mobile-menu, .nav-underline::after { display: none !important; }
+  header { position: static !important; background: white !important; backdrop-filter: none !important; border-bottom: 2px solid #000 !important; }
+  body { background: white !important; color: black !important; }
+  section { page-break-inside: avoid; }
+}
+
+/* ===== TOUCH DEVICE DETECTION ===== */
+@media (hover: none) and (pointer: coarse) {
+  .card-hover:hover { transform: none !important; }
+  .btn-magnetic { transform: none !important; }
+  .nav-underline::after { display: none; }
+}
+
+/* ===== REDUCED DATA MODE ===== */
+@media (prefers-reduced-data: reduce) {
+  #heroCanvas { display: none !important; }
+  .glow-orb { animation: none !important; }
+}
