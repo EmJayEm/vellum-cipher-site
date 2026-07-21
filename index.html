@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a56db">
+<title>Vellum &amp; Cipher — Legal &amp; Data Intelligence, Secured</title>
+<meta name="description" content="Vellum & Cipher provides elite legal and data intelligence for firms that cannot afford ambiguity.">
+<style>
+/* ============================================
+   VELLUM & CIPHER — COMPLETE SELF-CONTAINED
+   Zero external dependencies
+   ============================================ */
+
+/* RESET */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background: #ffffff;
+  color: #0f172a;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+input { font-family: inherit; }
+ul { list-style: none; }
+
+/* ===== VARIABLES ===== */
+:root {
+  --brand: #1a56db;
+  --brand-hover: #1648c4;
+  --brand-light: #eef3ff;
+  --brand-10: rgba(26,86,219,0.1);
+  --sky: #0ea5e9;
+  --ink: #0f172a;
+  --ink-body: #334155;
+  --ink-muted: #64748b;
+  --ink-faint: #94a3b8;
+  --surface: #ffffff;
+  --surface-off: #f8fafc;
+  --surface-subtle: #f1f5f9;
+  --surface-muted: #e2e8f0;
+  --white: #ffffff;
+}
+
+::selection { background: rgba(26,86,219,0.15); color: #0f172a; }
+
+/* ===== SCROLL PROGRESS ===== */
+#scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 9999;
+  background: linear-gradient(90deg, #1a56db, #0ea5e9, #1a56db);
+  width: 0%; transition: width 0.1s linear;
+}
+
+/* ===== LOAD CURTAIN ===== */
+#load-curtain {
+  position: fixed; inset: 0; z-index: 10000;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
+  transition: opacity 0.6s, visibility 0.6s;
+}
+#load-curtain.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-mark { font-size: 52px; font-weight: 800; color: #0f172a; }
+.loader-mark span { color: #1a56db; }
+.loader-bar { width: 120px; height: 3px; background: #e2e8f0; border-radius: 2px; overflow: hidden; }
+.loader-bar-fill { width: 0%; height: 100%; background: #1a56db; border-radius: 2px; animation: loadBar 0.7s 0.1s ease forwards; }
+@keyframes loadBar { to { width: 100%; } }
+
+/* ===== REVEAL ===== */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(.16,1,.3,1), transform 0.7s cubic-bezier(.16,1,.3,1); }
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* ===== HEADER ===== */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  border-bottom: 1px solid var(--surface-muted);
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: box-shadow 0.3s;
+}
+.header-inner {
+  max-width: 1320px; margin: 0 auto; padding: 0 24px;
+  height: 80px; display: flex; align-items: center; justify-content: space-between;
+}
+.logo-link {
+  display: flex; align-items: center; gap: 14px;
+}
+.logo-icon { width: 44px; height: 44px; flex-shrink: 0; }
+.logo-text-wrap { display: flex; flex-direction: column; }
+.logo-name {
+  font-size: 22px; font-weight: 800; color: #0f172a;
+  letter-spacing: -0.5px; line-height: 1.2;
+}
+.logo-sub {
+  font-size: 11px; color: #64748b;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* NAV */
+.main-nav { display: flex; align-items: center; gap: 4px; }
+.nav-link {
+  padding: 10px 18px; font-size: 15px; font-weight: 600;
+  color: #334155; border-radius: 8px; transition: color 0.2s;
+  position: relative;
+}
+.nav-link:hover { color: #0f172a; }
+.nav-link::after {
+  content: ''; position: absolute; left: 18px; right: 18px; bottom: 6px;
+  height: 2px; background: linear-gradient(90deg, #1a56db, #0ea5e9);
+  transform: scaleX(0); transform-origin: center; transition: transform 0.3s;
+  border-radius: 1px;
+}
+.nav-link:hover::after { transform: scaleX(1); }
+
+/* DROPDOWN */
+.nav-group { position: relative; }
+.nav-group-btn {
+  padding: 10px 18px; font-size: 15px; font-weight: 600;
+  color: #334155; border-radius: 8px; display: flex; align-items: center; gap: 6px;
+  transition: color 0.2s;
+}
+.nav-group-btn:hover { color: #0f172a; }
+.nav-group-btn svg { width: 14px; height: 14px; opacity: 0.5; }
+.nav-dropdown {
+  position: absolute; left: 50%; transform: translateX(-50%); top: 100%; padding-top: 12px;
+  opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s;
+}
+.nav-group:hover .nav-dropdown { opacity: 1; visibility: visible; }
+.nav-dropdown-card {
+  width: 340px; background: #fff; border-radius: 16px;
+  border: 1px solid #e2e8f0; box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  padding: 12px;
+}
+.dropdown-item {
+  display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px;
+  border-radius: 12px; transition: background 0.2s;
+}
+.dropdown-item:hover { background: #f8fafc; }
+.dropdown-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--brand-light); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+.dropdown-icon svg { width: 18px; height: 18px; color: var(--brand); }
+.dropdown-title { font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 2px; }
+.dropdown-desc { font-size: 12.5px; color: #64748b; line-height: 1.5; }
+
+/* CTA BUTTON */
+.header-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px; font-size: 14px; font-weight: 700;
+  background: #1a56db; color: #fff; border-radius: 100px;
+  transition: background 0.2s, box-shadow 0.3s, transform 0.25s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.header-cta:hover { background: #1648c4; box-shadow: 0 8px 30px rgba(26,86,219,0.3); transform: translateY(-1px); }
+
+/* MOBILE TOGGLE */
+.mobile-toggle {
+  display: none; width: 44px; height: 44px; align-items: center; justify-content: center;
+  border-radius: 10px; transition: background 0.2s;
+}
+.mobile-toggle:hover { background: #f1f5f9; }
+.mobile-toggle svg { width: 24px; height: 24px; color: #0f172a; }
+
+/* MOBILE MENU */
+.mobile-menu {
+  display: none; border-top: 1px solid #e2e8f0;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(16px);
+  padding: 24px;
+}
+.mobile-menu.open { display: block; }
+.mobile-menu a {
+  display: block; padding: 14px 0; font-size: 16px; font-weight: 600;
+  color: #334155; border-bottom: 1px solid #e2e8f0; transition: color 0.2s;
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:hover { color: #1a56db; }
+.mobile-menu .mobile-cta {
+  display: block; margin-top: 16px; padding: 14px; text-align: center;
+  background: #1a56db; color: #fff; border-radius: 100px; font-weight: 700;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative; padding: 180px 0 120px; overflow: hidden;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+.hero-glow {
+  position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none;
+}
+.hero-glow-1 { width: 600px; height: 400px; background: rgba(26,86,219,0.06); top: 10%; left: 20%; }
+.hero-glow-2 { width: 400px; height: 300px; background: rgba(14,165,233,0.05); bottom: 10%; right: 20%; }
+.hero-inner { position: relative; max-width: 1120px; margin: 0 auto; padding: 0 24px; text-align: center; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 8px 18px; border-radius: 100px;
+  background: var(--brand-light); border: 1px solid var(--brand-10);
+  font-size: 12px; font-weight: 700; color: #1a56db;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 40px;
+}
+.pulse-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #1a56db;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(26,86,219,0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(26,86,219,0); }
+}
+.hero h1 {
+  font-size: clamp(36px, 7vw, 80px); font-weight: 800;
+  line-height: 1.04; letter-spacing: -1px; color: #0f172a; margin-bottom: 28px;
+}
+.hero h1 .dim { color: #64748b; font-style: italic; }
+.hero h1 .gradient {
+  background: linear-gradient(135deg, #1a56db, #0ea5e9);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-desc {
+  font-size: 18px; color: #334155; max-width: 660px; margin: 0 auto 56px;
+  line-height: 1.8;
+}
+.hero-search {
+  max-width: 760px; margin: 0 auto; background: #fff;
+  border: 1px solid #e2e8f0; border-radius: 16px; padding: 8px;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.hero-search-icon { width: 20px; height: 20px; color: #94a3b8; margin-left: 12px; flex-shrink: 0; }
+#hero-prompt {
+  flex: 1; background: none; border: none; outline: none;
+  font-size: 15px; color: #0f172a; padding: 12px 0;
+  font-family: 'Courier New', monospace; text-align: left;
+}
+.hero-search-btn {
+  padding: 12px 24px; background: #1a56db; color: #fff;
+  border-radius: 12px; font-size: 14px; font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.hero-search-btn:hover { background: #1648c4; }
+.hero-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 48px; }
+.hero-tag {
+  padding: 8px 18px; border-radius: 100px;
+  background: #f1f5f9; border: 1px solid #e2e8f0;
+  font-size: 12px; font-weight: 500; color: #64748b;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.hero-tag:hover { border-color: rgba(26,86,219,0.3); color: #1a56db; background: #eef3ff; }
+
+/* ===== SECTIONS ===== */
+.section { padding: 100px 0; }
+.section-white { background: #fff; }
+.section-off { background: #f8fafc; }
+.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== FEATURES ===== */
+.features-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;
+}
+.features-title {
+  font-size: clamp(32px, 4vw, 50px); font-weight: 800;
+  line-height: 1.1; color: #0f172a; margin-bottom: 24px;
+}
+.features-title .blue { color: #1a56db; }
+.features-desc { font-size: 17px; color: #334155; line-height: 1.8; margin-bottom: 48px; }
+
+/* FEATURE TABS */
+.feature-tab {
+  width: 100%; text-align: left; padding: 24px; border-radius: 16px;
+  border: 2px solid #e2e8f0; transition: all 0.3s; margin-bottom: 16px;
+  background: #fff; cursor: pointer;
+}
+.feature-tab:hover { border-color: rgba(26,86,219,0.2); }
+.feature-tab.active {
+  background: #f8fafc; border-color: rgba(26,86,219,0.3);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+.feature-tab-phase {
+  font-size: 11px; font-weight: 700; color: #1a56db;
+  letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px;
+}
+.feature-tab h3 { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+.feature-tab p { font-size: 15px; color: #334155; line-height: 1.7; }
+
+/* TERMINAL */
+.terminal-wrap { position: sticky; top: 128px; }
+.terminal-box {
+  background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0;
+  padding: 4px; box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+}
+.terminal-inner {
+  background: #fff; border-radius: 14px; padding: 32px;
+  min-height: 420px; display: flex; flex-direction: column;
+  justify-content: center; position: relative; overflow: hidden;
+}
+.terminal-bar {
+  position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, #1a56db, #0ea5e9);
+}
+.terminal-header-text {
+  font-size: 11px; font-weight: 700; color: #64748b;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 24px;
+}
+#terminal-output {
+  font-family: 'Courier New', monospace; font-size: 13px;
+  line-height: 1.8; color: #334155; white-space: pre-wrap;
+  min-height: 160px;
+}
+.terminal-status {
+  margin-top: 24px; display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; color: #1a56db;
+}
+.terminal-status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #1a56db;
+  animation: pulse 2s infinite;
+}
+.terminal-cursor::after { content: '|'; animation: blink 1s step-start infinite; color: #1a56db; }
+@keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+
+/* ===== SECURITY ===== */
+.security-title {
+  font-size: clamp(32px, 4vw, 50px); font-weight: 800;
+  color: #0f172a; margin-bottom: 20px; text-align: center;
+}
+.security-desc {
+  font-size: 17px; color: #334155; max-width: 620px;
+  margin: 0 auto 64px; text-align: center; line-height: 1.8;
+}
+.security-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 64px; }
+.security-card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+  padding: 28px; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.security-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+.security-card-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--brand-light); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px; transition: background 0.3s;
+}
+.security-card:hover .security-card-icon { background: #1a56db; }
+.security-card-icon svg { width: 24px; height: 24px; color: #1a56db; transition: color 0.3s; }
+.security-card:hover .security-card-icon svg { color: #fff; }
+.security-card h3 { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+.security-card p { font-size: 13px; color: #64748b; line-height: 1.6; }
+
+/* STATS ROW */
+.stats-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  border-top: 1px solid #e2e8f0; padding-top: 48px; text-align: center;
+}
+.stat-number {
+  font-size: clamp(28px, 5vw, 52px); font-weight: 800;
+  color: #0f172a; margin-bottom: 8px;
+}
+.stat-label { font-size: 12px; font-weight: 700; color: #64748b; letter-spacing: 0.12em; text-transform: uppercase; }
+
+/* ===== ENTERPRISE ===== */
+.enterprise-tag {
+  font-size: 12px; font-weight: 700; color: #1a56db;
+  letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px;
+}
+.enterprise-title {
+  font-size: clamp(32px, 4vw, 50px); font-weight: 800;
+  line-height: 1.1; color: #0f172a; margin-bottom: 24px;
+}
+.enterprise-desc { font-size: 17px; color: #334155; line-height: 1.8; margin-bottom: 64px; max-width: 660px; }
+.enterprise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.enterprise-card {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 20px;
+  padding: 36px; transition: transform 0.3s, box-shadow 0.3s;
+}
+.enterprise-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+.enterprise-card-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--brand-light); border: 1px solid var(--brand-10);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 24px;
+}
+.enterprise-card-icon svg { width: 24px; height: 24px; color: #1a56db; }
+.enterprise-card h3 { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+.enterprise-card > p { font-size: 15px; color: #334155; line-height: 1.7; margin-bottom: 28px; }
+.enterprise-card ul { display: flex; flex-direction: column; gap: 14px; }
+.enterprise-card li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; font-family: 'Courier New', monospace; color: #64748b;
+}
+.check-icon { width: 16px; height: 16px; color: #1a56db; flex-shrink: 0; }
+
+/* ===== METHODOLOGY ===== */
+.method-title {
+  font-size: clamp(32px, 4vw, 50px); font-weight: 800;
+  color: #0f172a; margin-bottom: 20px; text-align: center;
+}
+.method-desc {
+  font-size: 17px; color: #334155; max-width: 700px;
+  margin: 0 auto 64px; text-align: center; line-height: 1.8;
+}
+.method-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+.method-card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+  padding: 28px; text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.method-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+.method-card-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: var(--brand-light); display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.method-card-icon svg { width: 20px; height: 20px; color: #1a56db; }
+.method-card h3 { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+.method-card p { font-size: 12.5px; color: #64748b; line-height: 1.5; }
+
+/* ===== CONTACT ===== */
+.contact-tag {
+  font-size: 12px; font-weight: 700; color: #1a56db;
+  letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px; text-align: center;
+}
+.contact-title {
+  font-size: clamp(32px, 4vw, 50px); font-weight: 800;
+  color: #0f172a; margin-bottom: 24px; text-align: center;
+}
+.contact-desc {
+  font-size: 17px; color: #334155; max-width: 600px;
+  margin: 0 auto 40px; text-align: center; line-height: 1.8;
+}
+.contact-form {
+  display: flex; gap: 12px; max-width: 540px; margin: 0 auto;
+}
+.contact-form input {
+  flex: 1; background: #f8fafc; border: 2px solid #e2e8f0;
+  border-radius: 12px; padding: 16px 20px; font-size: 15px;
+  color: #0f172a; outline: none; transition: border-color 0.2s, background 0.2s;
+}
+.contact-form input::placeholder { color: #94a3b8; }
+.contact-form input:focus { border-color: #1a56db; background: #fff; }
+.contact-form button {
+  padding: 16px 28px; background: #1a56db; color: #fff;
+  border-radius: 12px; font-size: 15px; font-weight: 700;
+  white-space: nowrap; transition: background 0.2s, box-shadow 0.3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.contact-form button:hover { background: #1648c4; box-shadow: 0 8px 30px rgba(26,86,219,0.3); }
+.contact-success { display: none; text-align: center; font-size: 14px; color: #1a56db; font-weight: 600; margin-top: 20px; }
+.contact-privacy { text-align: center; font-size: 13px; color: #64748b; margin-top: 24px; }
+
+/* ===== FOOTER ===== */
+.site-footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 64px 0 48px; }
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px;
+}
+.footer-brand p { font-size: 14px; color: #64748b; line-height: 1.7; margin-top: 24px; }
+.footer-heading {
+  font-size: 12px; font-weight: 700; color: #0f172a;
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 24px;
+}
+.footer-links { display: flex; flex-direction: column; gap: 16px; }
+.footer-links a { font-size: 15px; color: #64748b; font-weight: 500; transition: color 0.2s; }
+.footer-links a:hover { color: #1a56db; }
+.footer-divider {
+  height: 1px; background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
+  margin-bottom: 32px;
+}
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy { font-size: 13px; color: #64748b; }
+.footer-social { display: flex; gap: 24px; }
+.footer-social a { font-size: 12px; font-weight: 700; color: #64748b; letter-spacing: 0.05em; transition: color 0.2s; }
+.footer-social a:hover { color: #1a56db; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .main-nav, .header-cta-wrap { display: none; }
+  .mobile-toggle { display: flex; }
+  .features-grid { grid-template-columns: 1fr; gap: 40px; }
+  .terminal-wrap { position: static; }
+  .security-grid { grid-template-columns: repeat(2, 1fr); }
+  .enterprise-grid { grid-template-columns: 1fr; }
+  .method-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .hero { padding: 140px 0 80px; }
+  .hero h1 { font-size: clamp(30px, 8vw, 48px); }
+  .contact-form { flex-direction: column; }
+  .security-grid { grid-template-columns: 1fr; }
+  .method-grid { grid-template-columns: 1fr 1fr; }
+  .stats-row { grid-template-columns: 1fr; gap: 24px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  section { padding: 60px 0; }
+}
+@media (max-width: 480px) {
+  .method-grid { grid-template-columns: 1fr; }
+  .hero-tags { gap: 6px; }
+  .hero-tag { font-size: 11px; padding: 6px 12px; }
+  input, button { min-height: 44px; }
+  input[type="email"] { font-size: 16px; }
+}
+@media (hover: none) {
+  .security-card:hover, .enterprise-card:hover, .method-card:hover { transform: none; }
+}
+@media print {
+  #scroll-progress, #load-curtain, .hero-glow { display: none; }
+  .site-header { position: static; background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+
+<div id="load-curtain">
+  <div class="loader-mark">V<span>&amp;</span>C</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="#top" class="logo-link">
+      <svg class="logo-icon" viewBox="0 0 44 44" fill="none">
+        <rect width="44" height="44" rx="11" fill="#1a56db"/>
+        <path d="M13 13L22 32L31 13" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 21.5H28" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".7"/>
+        <circle cx="22" cy="14.5" r="2.2" fill="#fff"/>
+      </svg>
+      <div class="logo-text-wrap">
+        <span class="logo-name">Vellum &amp; Cipher</span>
+        <span class="logo-sub">Legal &amp; Data Intelligence</span>
+      </div>
+    </a>
+
+    <nav class="main-nav">
+      <div class="nav-group">
+        <button class="nav-group-btn">Intelligence <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-card">
+            <a href="#features" class="dropdown-item">
+              <div class="dropdown-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+              <div><div class="dropdown-title">Predictive Analytics</div><div class="dropdown-desc">Anticipate regulatory shifts before they occur.</div></div>
+            </a>
+            <a href="#features" class="dropdown-item">
+              <div class="dropdown-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+              <div><div class="dropdown-title">Contract Autopsy</div><div class="dropdown-desc">Deep-scan legacy agreements for hidden liabilities.</div></div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-group">
+        <button class="nav-group-btn">Security <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-card">
+            <a href="#security" class="dropdown-item">
+              <div class="dropdown-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div><div class="dropdown-title">Zero-Trust Architecture</div><div class="dropdown-desc">Military-grade encryption for client data.</div></div>
+            </a>
+            <a href="#security" class="dropdown-item">
+              <div class="dropdown-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+              <div><div class="dropdown-title">Compliance Vault</div><div class="dropdown-desc">Automated GDPR, DPA 2018, and CCPA alignment.</div></div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-group">
+        <button class="nav-group-btn">Enterprise <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-card">
+            <a href="#enterprise" class="dropdown-item">
+              <div class="dropdown-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.5 19H9a7 7 0 116.71-9h1.79a4.5 4.5 0 010 9z"/></svg></div>
+              <div><div class="dropdown-title">Private Cloud</div><div class="dropdown-desc">Dedicated, air-gapped deployment options.</div></div>
+            </a>
+            <a href="#enterprise" class="dropdown-item">
+              <div class="dropdown-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+              <div><div class="dropdown-title">API Integration</div><div class="dropdown-desc">Seamless connection to matter management.</div></div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <a href="#methodology" class="nav-link">Methodology</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+
+    <div class="header-cta-wrap">
+      <a href="#contact" class="header-cta">Request Access</a>
+    </div>
+
+    <button class="mobile-toggle" id="mobile-toggle" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#features" class="mobile-link">Intelligence</a>
+    <a href="#security" class="mobile-link">Security</a>
+    <a href="#enterprise" class="mobile-link">Enterprise</a>
+    <a href="#methodology" class="mobile-link">Methodology</a>
+    <a href="#contact" class="mobile-link">Contact</a>
+    <a href="#contact" class="mobile-link mobile-cta">Request Access</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div class="hero-inner">
+    <div class="reveal hero-badge">
+      <span class="pulse-dot"></span>
+      SYSTEM STATUS: ZERO-TRUST ACTIVE
+    </div>
+    <h1 class="reveal">Intelligence, <span class="dim">secured.</span><br><span class="gradient">Risk, neutralised.</span></h1>
+    <p class="reveal hero-desc">Vellum &amp; Cipher provides elite legal and data intelligence for firms that cannot afford ambiguity. Grounded in statutory precision, protected by military-grade encryption.</p>
+    <div class="reveal hero-search">
+      <svg class="hero-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      <span id="hero-prompt"></span>
+      <button class="hero-search-btn">Analyse <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="reveal hero-tags">
+      <span class="hero-tag">Threat Modelling</span>
+      <span class="hero-tag">Regulatory Mapping</span>
+      <span class="hero-tag">Privilege Protection</span>
+      <span class="hero-tag">Automated Redaction</span>
+      <span class="hero-tag">Jurisdictional Routing</span>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section section-white" id="features">
+  <div class="container">
+    <div class="features-grid">
+      <div class="reveal">
+        <h2 class="features-title">The architecture of <br><span class="blue">absolute confidence.</span></h2>
+        <p class="features-desc">We do not merely process text. We engineer certainty. Our three-phase methodology ensures every output is forensically accurate and cryptographically secure.</p>
+        <div id="feature-tabs">
+          <button class="feature-tab active" data-index="0">
+            <div class="feature-tab-phase">PHASE 01</div>
+            <h3>Ingest</h3>
+            <p>Upload documents of any format. Vellum &amp; Cipher's parsing engine strips metadata, normalises text, and prepares the data vault.</p>
+          </button>
+          <button class="feature-tab" data-index="1">
+            <div class="feature-tab-phase">PHASE 02</div>
+            <h3>Analyse</h3>
+            <p>Our proprietary cipher models cross-reference your text against millions of data points of current English and EU case law.</p>
+          </button>
+          <button class="feature-tab" data-index="2">
+            <div class="feature-tab-phase">PHASE 03</div>
+            <h3>Fortify</h3>
+            <p>Receive actionable, redlined drafts and strategic memoranda, ready for partner review, with full audit trails.</p>
+          </button>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="terminal-wrap">
+          <div class="terminal-box">
+            <div class="terminal-inner">
+              <div class="terminal-bar"></div>
+              <div class="terminal-header-text">// Vellum &amp; Cipher Terminal Output</div>
+              <div id="terminal-output"></div>
+              <div class="terminal-status">
+                <span class="terminal-status-dot"></span>
+                AWAITING NEXT COMMAND<span class="terminal-cursor"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="section section-off" id="security">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="security-title">Fortress-grade assurance</h2>
+      <p class="security-desc">Your clients' most sensitive data demands more than standard compliance. It requires architectural paranoia.</p>
+    </div>
+    <div class="security-grid">
+      <div class="reveal security-card">
+        <div class="security-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>ISO 27001 Certified</h3>
+        <p>Continuously audited and verified by independent third-party assessors.</p>
+      </div>
+      <div class="reveal security-card">
+        <div class="security-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg></div>
+        <h3>SOC 2 Type II</h3>
+        <p>Continuously audited and verified by independent third-party assessors.</p>
+      </div>
+      <div class="reveal security-card">
+        <div class="security-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="8" y="12" width="8" height="6" rx="1"/></svg></div>
+        <h3>UK GDPR Aligned</h3>
+        <p>Continuously audited and verified by independent third-party assessors.</p>
+      </div>
+      <div class="reveal security-card">
+        <div class="security-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h3>End-to-End Encrypted</h3>
+        <p>Continuously audited and verified by independent third-party assessors.</p>
+      </div>
+    </div>
+    <div class="reveal stats-row">
+      <div><div class="stat-number">99.9%</div><div class="stat-label">Uptime SLA</div></div>
+      <div><div class="stat-number">&lt;50ms</div><div class="stat-label">Query Latency</div></div>
+      <div><div class="stat-number">Zero</div><div class="stat-label">Data Breaches</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ENTERPRISE -->
+<section class="section section-white" id="enterprise">
+  <div class="container">
+    <div class="reveal">
+      <div class="enterprise-tag">FOR ENTERPRISE &amp; CHAMBERS</div>
+      <h2 class="enterprise-title">Built for firms that<br>cannot outsource trust.</h2>
+      <p class="enterprise-desc">Deploy Vellum &amp; Cipher within your own perimeter, on your own terms, wired into the systems you already run.</p>
+    </div>
+    <div class="enterprise-grid">
+      <div class="reveal enterprise-card">
+        <div class="enterprise-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="10" y1="18" x2="10" y2="18.01"/></svg></div>
+        <h3>Private Cloud</h3>
+        <p>Dedicated, air-gapped deployment options for chambers and enterprise legal teams.</p>
+        <ul>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Dedicated tenancy, no shared compute</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Optional on-premises deployment</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Full data residency control</li>
+        </ul>
+      </div>
+      <div class="reveal enterprise-card">
+        <div class="enterprise-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3>API Integration</h3>
+        <p>Seamless connection to existing matter management, DMS, and practice management platforms.</p>
+        <ul>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> REST &amp; webhook-based sync</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> SSO / SCIM provisioning</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Audit-logged access at every call</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section class="section section-off" id="methodology">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="method-title">Five disciplines, one output.</h2>
+      <p class="method-desc">Every engagement is routed through the same five-part discipline, whatever the jurisdiction or document type.</p>
+    </div>
+    <div class="method-grid">
+      <div class="reveal method-card">
+        <div class="method-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <h3>Threat Modelling</h3>
+        <p>Map exposure before it becomes exposure.</p>
+      </div>
+      <div class="reveal method-card">
+        <div class="method-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
+        <h3>Regulatory Mapping</h3>
+        <p>Track obligations across every jurisdiction.</p>
+      </div>
+      <div class="reveal method-card">
+        <div class="method-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+        <h3>Privilege Protection</h3>
+        <p>Preserve legal privilege at every stage.</p>
+      </div>
+      <div class="reveal method-card">
+        <div class="method-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div>
+        <h3>Automated Redaction</h3>
+        <p>Sensitive data removed before it leaves the vault.</p>
+      </div>
+      <div class="reveal method-card">
+        <div class="method-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="16 12 12 8 8 12"/><line x1="12" y1="16" x2="12" y2="8"/></svg></div>
+        <h3>Jurisdictional Routing</h3>
+        <p>Every matter reviewed against the right body of law.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section section-white" id="contact">
+  <div class="container">
+    <div class="reveal contact-tag">REQUEST ACCESS</div>
+    <h2 class="reveal contact-title">Ready for certainty?</h2>
+    <p class="reveal contact-desc">Access is by qualification. Tell us about your firm and a member of the Vellum &amp; Cipher team will respond within one business day.</p>
+    <form class="reveal contact-form" id="contact-form">
+      <input type="email" required placeholder="Work email address" id="work-email">
+      <button type="submit">Request Access</button>
+    </form>
+    <p class="contact-success" id="contact-success">Request received. Our team will be in touch shortly.</p>
+    <p class="reveal contact-privacy">No spam. No third-party sharing. Ever.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:12px">
+          <svg width="32" height="32" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="11" fill="#1a56db"/><path d="M13 13L22 32L31 13" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 21.5H28" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".7"/><circle cx="22" cy="14.5" r="2.2" fill="#fff"/></svg>
+          <span style="font-size:18px;font-weight:800;color:#0f172a">Vellum &amp; Cipher</span>
+        </div>
+        <p>Engineering certainty for the world's most discerning legal and enterprise entities.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Platform</div>
+        <div class="footer-links">
+          <a href="#features">Intelligence</a>
+          <a href="#security">Security</a>
+          <a href="#enterprise">Enterprise</a>
+          <a href="#">API Docs</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Company</div>
+        <div class="footer-links">
+          <a href="#methodology">Manifesto</a>
+          <a href="#">Careers</a>
+          <a href="#">Press</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Legal</div>
+        <div class="footer-links">
+          <a href="#">Privacy Protocol</a>
+          <a href="#">Terms of Engagement</a>
+          <a href="#">Security Disclosure</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2026 Vellum &amp; Cipher Ltd. All rights reserved.</p>
+      <div class="footer-social">
+        <a href="#">LINKEDIN</a>
+        <a href="#">X / TWITTER</a>
+        <a href="#">GITHUB</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== LOAD CURTAIN =====
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('load-curtain').classList.add('hidden'), 900);
+});
+
+// ===== SCROLL PROGRESS =====
+window.addEventListener('scroll', () => {
+  const pct = (document.documentElement.scrollTop / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('scroll-progress').style.width = Math.min(pct, 100) + '%';
+});
+
+// ===== HEADER SHADOW =====
+window.addEventListener('scroll', () => {
+  document.getElementById('site-header').style.boxShadow = window.scrollY > 10 ? '0 4px 16px rgba(0,0,0,0.06)' : 'none';
+});
+
+// ===== MOBILE MENU =====
+const mobileToggle = document.getElementById('mobile-toggle');
+const mobileMenu = document.getElementById('mobile-menu');
+mobileToggle.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
+});
+document.querySelectorAll('.mobile-link').forEach(a => a.addEventListener('click', () => {
+  mobileMenu.classList.remove('open');
+}));
+
+// ===== REVEAL ON SCROLL =====
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ===== HERO TYPEWRITER =====
+const PROMPTS = [
+  "Analyse this NDA for unilateral termination risks\u2026",
+  "Map our data flow against the updated DPA 2018 guidelines\u2026",
+  "Summarise the liability exposure in this M&A draft\u2026",
+  "Identify cross-border data transfer obligations\u2026",
+  "Flag non-standard indemnification clauses\u2026"
+];
+const hpEl = document.getElementById('hero-prompt');
+let hpIdx = 0;
+function typeT(el, t, s=30) { return new Promise(r => { el.textContent=''; let i=0; const iv=setInterval(()=>{el.textContent+=t.charAt(i);i++;if(i>=t.length){clearInterval(iv);r();}},s); }); }
+function eraseT(el, s=15) { return new Promise(r => { const iv=setInterval(()=>{if(!el.textContent.length){clearInterval(iv);r();return;}el.textContent=el.textContent.slice(0,-1);},s); }); }
+async function cyclePrompts() { while(true){await typeT(hpEl,PROMPTS[hpIdx]);await new Promise(r=>setTimeout(r,2000));await eraseT(hpEl);hpIdx=(hpIdx+1)%PROMPTS.length;} }
+if(!matchMedia('(prefers-reduced-motion:reduce)').matches) cyclePrompts(); else hpEl.textContent=PROMPTS[0];
+
+// ===== FEATURE TABS =====
+const VIS = [
+"INGESTION PROTOCOL INITIATED\n[########..] 80%\nScanning: MSA_Draft_v4.pdf\nMetadata stripped. Hash verified.\nPreparing data vault...",
+"ANALYSIS COMPLETE\nAnomalies detected: 2\n- Clause 4.2: Non-compete exceeds 12 months (High Risk)\n- Clause 7.1: Governing law ambiguous (Medium Risk)\nCross-referenced against 2.4M case records.",
+"OUTPUT GENERATED\nDocument: Redlined_MSA_v4.pdf\nAudit Log: SHA-256 encrypted\nStatus: Ready for Partner Sign-off\nEncryption: AES-256-GCM applied."
+];
+const tabs = document.querySelectorAll('.feature-tab');
+const tOut = document.getElementById('terminal-output');
+let tToken = 0;
+function setTab(i) {
+  tabs.forEach((t,j) => { const a=j===i; t.classList.toggle('active',a); });
+  const my=++tToken; tOut.textContent='';
+  (async()=>{for(let c=0;c<VIS[i].length;c++){if(my!==tToken)return;tOut.textContent+=VIS[i].charAt(c);await new Promise(r=>setTimeout(r,14));}})();
+}
+tabs.forEach((t,i)=>t.addEventListener('click',()=>setTab(i)));
+setTab(0);
+
+// ===== CONTACT FORM =====
+document.getElementById('contact-form').addEventListener('submit', e => {
+  e.preventDefault();
+  e.target.style.display = 'none';
+  document.getElementById('contact-success').style.display = 'block';
+});
+</script>
+</body>
+</html>
